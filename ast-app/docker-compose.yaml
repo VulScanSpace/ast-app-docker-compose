@@ -1,11 +1,9 @@
 version: '3.4'
 
 services:
-  mariadb:
-    image: mariadb:latest
+  mysql:
+    image: mysql:latest
     volumes:
-      - ./data/db:/var/lib/mysql
-      - ./etc/my.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
       - ./db:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
@@ -13,7 +11,7 @@ services:
       MYSQL_USER: ast-app
       MYSQL_PASSWORD: ast-app@pwd!2022 #访问密码
       MYSQL_DATABASE: ast-app
-      MARIADB_RANDOM_ROOT_PASSWORD: true
+      MYSQL_RANDOM_ROOT_PASSWORD: true
     networks:
       - nebula-net
     restart: always
@@ -21,7 +19,7 @@ services:
   ast-app:
     image: owef/ast-app-backend:latest
     depends_on:
-      - mariadb
+      - mysql
       - graphd
     healthcheck:
       test: ["CMD", "curl", "-sf", "http://ast-app:8000/status"]

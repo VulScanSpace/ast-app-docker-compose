@@ -1,0 +1,55 @@
+version: '3.4'
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - ./data/db:/var/lib/mysql
+      - ./etc/my.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./ast-app/db:docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: ast-app
+      MYSQL_PASSWORD: ast-app@pwd$!2022 #访问密码
+      MYSQL_DATABASE: ast-app
+      secure_file_priv:
+    networks:
+      - nebula-net
+    restart: always
+
+  ast-app:
+    image: vesoft/nebula-graphd:nightly
+    depends_on:
+      - mariadb
+      - graphd
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://ast-app:8000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "8008:8000"
+    networks:
+      - nebula-net
+    restart: on-failure
+
+  # ast-app-web:
+  #   image: vesoft/nebula-graphd:nightly
+  #   depends_on:
+  #     - ast-app
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-sf", "http://ast-app-web:80/status"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 20s
+  #   ports:
+  #     - "8008:80"
+  #   networks:
+  #     - nebula-net
+  #   restart: on-failure
+  
+
+networks:
+  nebula-net:

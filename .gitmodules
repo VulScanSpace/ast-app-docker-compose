@@ -1,0 +1,3 @@
+[submodule "nebula-docker-compose"]
+	path = nebula-docker-compose
+	url = git@github.com:vesoft-inc/nebula-docker-compose.git

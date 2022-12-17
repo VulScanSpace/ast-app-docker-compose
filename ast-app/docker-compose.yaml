@@ -4,9 +4,9 @@ services:
   mariadb:
     image: mariadb:latest
     volumes:
-      # - ./ast-app/data/db:/var/lib/mysql
-      # - ./ast-app/etc/my.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
-      - ./ast-app/db:/docker-entrypoint-initdb.d
+      - ./data/db:/var/lib/mysql
+      - ./etc/my.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./db:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     environment:

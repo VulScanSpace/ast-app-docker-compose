@@ -5,14 +5,14 @@ services:
     volumes:
       - ./data/db:/var/lib/mysql
       - ./etc/my.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
-      - ./ast-app/db:docker-entrypoint-initdb.d
+      - ./ast-app/db:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     environment:
       MYSQL_USER: ast-app
       MYSQL_PASSWORD: ast-app@pwd!2022 #访问密码
       MYSQL_DATABASE: ast-app
-      secure_file_priv:
+      MARIADB_RANDOM_ROOT_PASSWORD: true
     networks:
       - nebula-net
     restart: always
